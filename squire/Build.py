@@ -9,14 +9,12 @@ import argparse #module that passes command-line arguments into script
 import subprocess
 import glob
 import urllib
-import urllib2
 from urllib.request import urlopen
 import tarfile
 import gzip
 from datetime import datetime
 import subprocess as sp
 import zipfile
-from urllib2 import urlopen
 import re
 import shutil
 import tempfile
@@ -26,7 +24,7 @@ import warnings
 def make_dir(path):
     try:
         original_umask = os.umask(0)
-        os.makedirs(path, 0770)
+        os.makedirs(path, 0o770)
     except OSError as exception:
         if exception.errno != errno.EEXIST:
             raise

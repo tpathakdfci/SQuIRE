@@ -20,7 +20,7 @@ from subprocess import Popen, PIPE,STDOUT
 def make_dir(path):
     try:
         original_umask = os.umask(0)
-        os.makedirs(path, 0770)
+        os.makedirs(path, 0o770)
     except OSError as exception:
         if exception.errno != errno.EEXIST:
             raise

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import sys
 import os
 
-install_requires = ['pyfaidx','urllib3[secure]','six']
+install_requires = ['pyfaidx','urllib3','six']
 #if python is 2.6, requires argparse
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     install_requires.extend(['argparse'])

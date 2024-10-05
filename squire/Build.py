@@ -9,7 +9,8 @@ import argparse #module that passes command-line arguments into script
 import subprocess
 import glob
 import urllib
-import urllib2
+import urllib3
+from urllib.request import urlopen
 import tarfile
 import gzip
 from datetime import datetime

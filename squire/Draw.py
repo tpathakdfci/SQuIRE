@@ -169,7 +169,7 @@ def main(**kwargs):
         print(os.path.basename(__file__) + '\n', file = sys.stderr) #prints script name to std err
         print("Script Arguments" + '\n' + "=================", file = sys.stderr)
         args_dict = vars(args)
-        for option,arg in args_dict.iteritems():
+        for option,arg in args_dict.items():
             print(str(option) + "=" + str(arg), file = sys.stderr) #prints all arguments to std err
         print("\n", file = sys.stderr)
     make_dir(outfolder)

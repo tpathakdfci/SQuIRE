@@ -221,7 +221,7 @@ def filter_tx(infile,gene_dict,read_length,genecounts):
 				ref_line=gtfline(line[9:18])
 				gene_dict[(ref_line.Gene_ID,ref_line.strand)].add_tx(gtf_line.transcript_id)
 	with open(genecounts,'w') as outfile:
-		for genestrand,geneinfo in gene_dict.iteritems():
+		for genestrand,geneinfo in gene_dict.items():
 			outline="\t".join(geneinfo.countsout)
 			outfile.writelines(outline+"\n")
 
@@ -661,7 +661,7 @@ def find_paired_uniq(multi_tempfile,paired_uniq_tempfile,new_multi_tempfile, new
 			newbedline.Read_geno_stop = str(min(stop_list))
 			newbedline.write_bedline(uniqfile)
 		else:
-			for TE_ID, newbedline in beddict.iteritems():
+			for TE_ID, newbedline in beddict.items():
 				newbedline.write_bedline(multifile)
 	paired_uniq_bed = open(paired_uniq_tempfile,'r')
 	paired_uniq_bed.seek(0)
@@ -1271,7 +1271,7 @@ def multicount(tempBED,RepCalc_dict, multidict,read_locdict):
 
 
 def comparedict(read_multidict, RepCalc_dict):
-	for Read_ID,TE_dict in read_multidict.iteritems():
+	for Read_ID,TE_dict in read_multidict.items():
 		setfraction(Read_ID,TE_dict,RepCalc_dict)
 
 
@@ -1281,7 +1281,7 @@ def setfraction(Read_ID,TE_dict,RepCalc_dict): #compare multi with unique
 	read_subF = []
 	read_sum=0
 	### Use count from  unique count based on strand
-	for TE_ID,strand in TE_dict.iteritems():
+	for TE_ID,strand in TE_dict.items():
 		#adj=locdict[TE_ID][3]
 		#if TE_ID is untagged, would not have any unique reads
 		if strand == "+":
@@ -1310,7 +1310,7 @@ def setfraction(Read_ID,TE_dict,RepCalc_dict): #compare multi with unique
 	#print("TagKb_sum " + Read_ID + " " + str(TagKb_sum),file = sys.stderr)
 	remainder_fraction = (len(TE_dict) - UnTagged_TEs)/len(TE_dict) #fraction of TEs in TE_dict that are tagged
 	if TagKb_sum > 0: #if some unique elements can be assigned
-		for TE_ID, uniq_sum in ID_TagKb_dict.iteritems():
+		for TE_ID, uniq_sum in ID_TagKb_dict.items():
 			# adj=locdict[TE_ID][3]
 			strand = TE_dict[TE_ID]
 			#print(TE_ID + " " + str(uniq_sum),file = sys.stderr)
@@ -1321,7 +1321,7 @@ def setfraction(Read_ID,TE_dict,RepCalc_dict): #compare multi with unique
 			read_subF.append(get_subF(TE_ID))
 	### If no unique counts for any element in new dict, read fraction is 1/number of elements per read
 	else:
-		for TE_ID, uniq_sum in ID_TagKb_dict.iteritems():
+		for TE_ID, uniq_sum in ID_TagKb_dict.items():
 			strand = TE_dict[TE_ID]
 			#adj=locdict[TE_ID][3]
 			read_fraction = 1/len(TE_dict) #defines read_fraction by TE_IDs contribution to total uniqperTagKb_sum
@@ -1341,7 +1341,7 @@ def estdict(read_multidict, RepCalc_dict):
 	changed_likelihood_sum = 0
 	read_no=0
 	changed_reads = 0
-	for Read_ID,TE_dict in read_multidict.iteritems():
+	for Read_ID,TE_dict in read_multidict.items():
 		changed_likelihood = maxfraction(Read_ID,TE_dict,RepCalc_dict)
 		changed_likelihood_sum +=changed_likelihood
 		read_no +=1
@@ -1366,7 +1366,7 @@ def maxfraction(Read_ID,TE_dict,RepCalc_dict): #calculate new likelihoods and co
 	read_sum=0
 	TEcount=0
 	### Use count from  unique count based on strand
-	for TE_ID,strand in TE_dict.iteritems():
+	for TE_ID,strand in TE_dict.items():
 		if strand == "+":
 			ID_TagKb_dict[(TE_ID,strand)] = (RepCalc_dict[TE_ID].oldmulti_plus_perkb,RepCalc_dict[TE_ID].newmulti_plus_perkb)
 			oldTagKb_sum += RepCalc_dict[TE_ID].oldmulti_plus_perkb
@@ -1380,7 +1380,7 @@ def maxfraction(Read_ID,TE_dict,RepCalc_dict): #calculate new likelihoods and co
 			if RepCalc_dict[TE_ID].newmulti_minus_perkb > 0:
 				TEcount+=1
 
-	for TE_ID_tuple, multi_sum_tuple in ID_TagKb_dict.iteritems():
+	for TE_ID_tuple, multi_sum_tuple in ID_TagKb_dict.items():
 		TE_ID = TE_ID_tuple[0]
 		strand = TE_ID_tuple[1]
 		old_multi = multi_sum_tuple[0]
@@ -1519,7 +1519,7 @@ def main(**kwargs):
 		print(os.path.basename(__file__) + '\n', file = sys.stderr) #prints script name to std err
 		print("Script Arguments" + '\n' + "=================", file = sys.stderr)
 		args_dict = vars(args)
-		for option,arg in args_dict.iteritems():
+		for option,arg in args_dict.items():
 			print(str(option) + "=" + str(arg), file = sys.stderr) #prints all arguments to std err
 		print("\n", file = sys.stderr)
 
@@ -1814,7 +1814,7 @@ def main(**kwargs):
 	if verbosity:
 		print("Adding Tag information to aligned TEs "+ str(datetime.now())  + "\n",file = sys.stderr)
 
-	for TE_ID,RepClass in RepCalc_dict.iteritems():
+	for TE_ID,RepClass in RepCalc_dict.items():
 		RepClass.calcuniqRep()
 
 	if verbosity:
@@ -1840,7 +1840,7 @@ def main(**kwargs):
 				if verbosity:
 					print("Running expectation-maximization calculation for iteration:" + str(iteration) + " " + str(datetime.now())  + "\n",file = sys.stderr)
 
-				for TE_ID,RepClass in RepCalc_dict.iteritems():
+				for TE_ID,RepClass in RepCalc_dict.items():
 					TE_changecount = RepClass.calcmultiRep(iteration)
 					max_count_change = max(TE_changecount,max_count_change)
 					changed_count +=TE_changecount
@@ -1888,7 +1888,7 @@ def main(**kwargs):
 			if verbosity:
 				print("Running expectation-maximization calculation for iteration:" + str(iteration) + " " + str(datetime.now())  + "\n",file = sys.stderr)
 
-			for TE_ID,RepClass in RepCalc_dict.iteritems():
+			for TE_ID,RepClass in RepCalc_dict.items():
 				TE_changecount = RepClass.calcmultiRep(iteration)
 				max_count_change = max(TE_changecount,max_count_change)
 				changed_count +=TE_changecount
@@ -1927,7 +1927,7 @@ def main(**kwargs):
 		subF_file_header.close()
 		subF_dict = {}
 
-	for TE_ID,RepClass in RepCalc_dict.iteritems(): #for each TE_ID
+	for TE_ID,RepClass in RepCalc_dict.items(): #for each TE_ID
 		RepClass.writeRep(aligned_libsize,counts_temp,basename,strandedness,iteration)
 	##########Sort by highest total counts before writing and add to subF dictionary
 

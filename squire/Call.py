@@ -254,7 +254,7 @@ def main(**kwargs):
         print("Script start time is:" + str(CallTime) + '\n', file = sys.stderr)# Prints Call time
         print("Script Arguments" + '\n' + "=================", file = sys.stderr)
         args_dict = vars(args)
-        for option,arg in args_dict.iteritems():
+        for option,arg in args_dict.items():
             print(str(option) + "=" + str(arg), file = sys.stderr) #prints all arguments to std err
         print("\n", file = sys.stderr)
     if os.path.isfile(outfolder):

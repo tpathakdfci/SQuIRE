@@ -9,14 +9,12 @@ import argparse #module that passes command-line arguments into script
 import subprocess
 import glob
 import urllib
-import urllib2
 from urllib.request import urlopen
 import tarfile
 import gzip
 from datetime import datetime
 import subprocess as sp
 import zipfile
-from urllib2 import urlopen
 import re
 import shutil
 import tempfile

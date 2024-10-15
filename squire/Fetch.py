@@ -10,6 +10,7 @@ import subprocess
 import glob
 import urllib
 from urllib.request import urlopen
+from urllib.request import urlretrieve
 import tarfile
 import gzip
 from datetime import datetime
@@ -208,22 +209,22 @@ def main(**kwargs):
         #Download chromosome fasta files
 
         chrom_name_compressed = chrom_basename + "chromFa.tar.gz"
-        urllib.urlretrieve(chrom_loc1, filename=chrom_name_compressed)
+        urlretrieve(chrom_loc1, filename=chrom_name_compressed)
         df_fail1=failed_dl(chrom_name_compressed)
         if df_fail1:
             os.unlink(chrom_name_compressed)
             chrom_name_compressed = chrom_basename + "chromFa.tar.gz"
-            urllib.urlretrieve(chrom_loc2, filename=chrom_name_compressed)
+            urlretrieve(chrom_loc2, filename=chrom_name_compressed)
             df_fail2=failed_dl(chrom_name_compressed)
             if df_fail2:
                 os.unlink(chrom_name_compressed)
                 chrom_name_compressed = chrom_basename + ".fa.gz"
-                urllib.urlretrieve(chrom_loc3, filename=chrom_name_compressed)
+                urlretrieve(chrom_loc3, filename=chrom_name_compressed)
                 df_fail3=failed_dl(chrom_name_compressed)
                 if df_fail3:
                     os.unlink(chrom_name_compressed)
                     chrom_name_compressed = outfolder + "/" + "chromFa.zip"
-                    urllib.urlretrieve(chrom_loc4, filename=chrom_name_compressed)
+                    urlretrieve(chrom_loc4, filename=chrom_name_compressed)
                     df_fail4=failed_dl(chrom_name_compressed)
                     if df_fail4:
                         os.unlink(chrom_name_compressed)
@@ -299,7 +300,7 @@ def main(**kwargs):
         chrom_info_name = outfolder + "/" + build + "_chromInfo.txt"
         chrom_info_name_compressed = chrom_info_name + ".gz"
         #Downloads Chromosome info file
-        urllib.urlretrieve(chrom_info_loc, filename=chrom_info_name_compressed)
+        urlretrieve(chrom_info_loc, filename=chrom_info_name_compressed)
 
         if verbosity:
             print("Finished Downloading Chrom_info file, Decompressing..." + "\n", file = sys.stderr)
@@ -346,7 +347,7 @@ def main(**kwargs):
                 print("Multiple Repeatmasker files found, Downloading, Decompressing and combining into a single file..." + "\n", file = sys.stderr)
             with open(rmsk_file,'wb') as outfile:
                 for filename in rmsk_list:
-                    remotefile=urllib.urlretrieve(rmsk_loc + filename, filename=outfolder +"/" + filename)
+                    remotefile=urlretrieve(rmsk_loc + filename, filename=outfolder +"/" + filename)
                     if verbosity:
                            print("Downloading Compressed Repeatmasker file" + " " + filename + "\n", file=sys.stderr)
                     newfilename=filename.replace(".gz","")
@@ -367,7 +368,7 @@ def main(**kwargs):
         elif len(rmsk_list) == 1:
             rmsk_list=list(rmsk_list)
             filename=rmsk_list[0]
-            remotefile=urllib.urlretrieve(rmsk_loc + filename, filename=outfolder +"/" + filename)
+            remotefile=urlretrieve(rmsk_loc + filename, filename=outfolder +"/" + filename)
             if verbosity:
                 print("Finished Downloading Repeatmasker file, Decompressing..." + "\n", file = sys.stderr)
             decompress(compressed=outfolder + "/" + filename, decompressed=rmsk_file)
@@ -391,7 +392,7 @@ def main(**kwargs):
         refGene_name = outfolder + "/" + build + "_refGene.txt"
         refGene_name_compressed = refGene_name + ".gz"
         #Downloads Chromosome info file
-        urllib.urlretrieve(refGene_loc, filename=refGene_name_compressed)
+        urlretrieve(refGene_loc, filename=refGene_name_compressed)
 
         if verbosity:
             print("Finished Downloading refGene file, Decompressing..." + "\n", file = sys.stderr)

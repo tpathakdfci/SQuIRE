@@ -196,40 +196,41 @@ def main(**kwargs):
     make_dir(outfolder)
 
     ####### DOWNLOAD CHROMOSOME FASTA FILES #########
-    if fasta:
-        if verbosity:
-            print("Downloading Compressed Chromosome files..." + "\n", file = sys.stderr)
+if fasta:
+    if verbosity:
+        print("Downloading Compressed Chromosome files...\n", file=sys.stderr)
 
-        chrom_loc1 = "http://hgdownload.cse.ucsc.edu/goldenPath"  + "/" + build + "/" + "bigZips" + "/" + "chromFa.tar.gz"  # Different file types depending on size/format of chromosome data
-        chrom_loc2 = "http://hgdownload.cse.ucsc.edu/goldenPath"  + "/" + build + "/" + "bigZips" + "/" + build + ".chromFa.tar.gz"
-        chrom_loc3 = "http://hgdownload.cse.ucsc.edu/goldenPath"  + "/" + build + "/" + "bigZips" + "/" + build + ".fa.gz"
-        chrom_loc4 = "http://hgdownload.cse.ucsc.edu/goldenPath"  + "/" + build + "/" + "bigZips" + "/" + "chromFa.zip"
-        chrom_basename = outfolder + "/" + build
-        chrom_outfolder= chrom_basename + ".chromFa"
-        #Download chromosome fasta files
+    urls = [
+        f"http://hgdownload.cse.ucsc.edu/goldenPath/{build}/bigZips/chromFa.tar.gz",
+        f"http://hgdownload.cse.ucsc.edu/goldenPath/{build}/bigZips/{build}.chromFa.tar.gz",
+        f"http://hgdownload.cse.ucsc.edu/goldenPath/{build}/bigZips/{build}.fa.gz",
+        f"http://hgdownload.cse.ucsc.edu/goldenPath/{build}/bigZips/chromFa.zip"
+    ]
 
-        chrom_name_compressed = chrom_basename + "chromFa.tar.gz"
-        urlretrieve(chrom_loc1, filename=chrom_name_compressed)
-        df_fail1=failed_dl(chrom_name_compressed)
-        if df_fail1:
-            os.unlink(chrom_name_compressed)
-            chrom_name_compressed = chrom_basename + "chromFa.tar.gz"
-            urlretrieve(chrom_loc2, filename=chrom_name_compressed)
-            df_fail2=failed_dl(chrom_name_compressed)
-            if df_fail2:
-                os.unlink(chrom_name_compressed)
-                chrom_name_compressed = chrom_basename + ".fa.gz"
-                urlretrieve(chrom_loc3, filename=chrom_name_compressed)
-                df_fail3=failed_dl(chrom_name_compressed)
-                if df_fail3:
-                    os.unlink(chrom_name_compressed)
-                    chrom_name_compressed = outfolder + "/" + "chromFa.zip"
-                    urlretrieve(chrom_loc4, filename=chrom_name_compressed)
-                    df_fail4=failed_dl(chrom_name_compressed)
-                    if df_fail4:
-                        os.unlink(chrom_name_compressed)
-                        raise Exception("Was not able to download chromosome file from UCSC" + "\n", file = sys.stderr)
+    filenames = [
+        f"{chrom_basename}chromFa.tar.gz",
+        f"{chrom_basename}chromFa.tar.gz",
+        f"{chrom_basename}.fa.gz",
+        f"{outfolder}/chromFa.zip"
+    ]
 
+    success = False
+
+    for url, filename in zip(urls, filenames):
+        try:
+            urlretrieve(url, filename=filename)
+            if not failed_dl(filename):
+                print(f"Successfully downloaded from {url}")
+                success = True
+                break
+        except Exception as e:
+            print(f"Failed to download from {url}: {e}", file=sys.stderr)
+        finally:
+            if failed_dl(filename):
+                os.unlink(filename)
+
+    if not success:
+        raise Exception("Was not able to download chromosome file from UCSC")
 
         if verbosity:
             print("Finished Downloading Compressed Chromosome folder, Decompressing..." + "\n", file = sys.stderr)
